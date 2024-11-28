@@ -1,0 +1,75 @@
+.stat-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 16px;
+    width: 350px;
+    height: 124px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .stat-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+
+  .stat-card-bar {
+    height: 100%;
+    width: 6px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  .stat-card-title-and-value {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+  }
+  
+  .stat-card-title {
+    font-size: 14px;
+    color: #888888;
+  }
+  
+  .stat-card-icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .stat-card-body {
+    margin: 16px 0;
+  }
+  
+  .stat-card-value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333333;
+  }
+  
+  .stat-card-footer {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  .stat-card-footer.positive .stat-card-percentage {
+    color: #28a745; /* Green for positive change */
+  }
+  
+  .stat-card-footer.negative .stat-card-percentage {
+    color: #dc3545; /* Red for negative change */
+  }
+  
+  .stat-card-description {
+    color: #888888;
+  }
+  

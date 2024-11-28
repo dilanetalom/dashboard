@@ -1,0 +1,28 @@
+
+/* class pour les couleurs  */
+.graycolor{
+    color: #007f99;
+   }
+   .graybackcolor{
+    background-color: #007f99;
+   }
+   .orangecolor{
+    color: #FF7300;
+   }
+   .orangebackcolor{
+   background-color: #FF7300;
+   }
+   .yellowcolor{
+    color: #f6d860;
+   }
+   .yellowbackcolor{
+   background-color: #f6d860;
+   }
+  
+   .opacitycolor{
+    color: #f4f4f4;
+   }
+   .opacitybackcolor{
+    background-color: #f4f4f4;
+   }
+

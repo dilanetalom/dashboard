@@ -1,0 +1,139 @@
+/* Container */
+.order-sell-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    min-height: calc(100vh - 80px);
+    overflow: hidden;
+  }
+  
+  /* Tabs */
+  .tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .tab-button {
+    background-color: #000000;
+    color: #ffffff;
+    border: 0;
+    font-size: 18px;
+
+    padding: 10px 20px;
+    cursor: pointer;
+    width: 215px;
+    height: 60px;
+  }
+  
+  .tab-button.active {
+    background-color: #007F99;
+    color: white;
+  }
+  
+  .tab-button:hover:not(.active) {
+    background-color: #696969a4;
+  }
+  
+  /* Table */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+  
+  .data-table thead th {
+    text-align: left;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .data-table tbody td {
+    padding: 10px;
+    border-bottom: 1px solid #f5f5f5;
+    vertical-align: middle;
+  }
+  
+  .data-table tbody tr:hover {
+    background-color: #f9f9f9;
+  }
+  
+  /* Status Badges */
+  .status-badge,
+  .payment-status-badge,
+  .order-status-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+  }
+  
+  .status-badge {
+    background-color: black;
+    color: white;
+  }
+  
+  .payment-status-badge {
+    background-color: #ffcc00;
+    color: #555;
+  }
+  
+  .order-status-badge {
+    background-color: #ff6600;
+    color: white;
+  }
+  
+  /* Action Buttons */
+  .delete-button {
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    margin-right: 5px;
+    cursor: pointer;
+  }
+  
+  .edit-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    cursor: pointer;
+  }
+  
+  .delete-button:hover {
+    background-color: #ff6666;
+  }
+  
+  .edit-button:hover {
+    background-color: #339aff;
+  }
+
+    /* Add Book Button */
+    .add-button {
+        background-color: #ff6600;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 15px 20px;
+        margin-top: 20px;
+        cursor: pointer;
+        display: block;
+        width: 200px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        font-family: inherit;
+      }
+      
+      .add-button:hover {
+        background-color: #ff8533;
+      }
+      
+  

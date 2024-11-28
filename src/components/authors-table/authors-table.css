@@ -1,0 +1,176 @@
+/* Container */
+.authors-table-container {
+    background-color: #ffffff;
+    padding: 20px;
+    width: 100%;
+    height: calc(100vh - 80px);
+    overflow: hidden;
+  }
+  
+  /* Search and Filter Section */
+  .authors-search-filter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .search-input {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    width: 300px;
+  }
+  
+  .search-button {
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  .filter-button {
+    background-color: #f5f5f5;
+    color: #555;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  .filter-button:hover {
+    background-color: #e0e0e0;
+  }
+  
+  /* Table */
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  .authors-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+  
+  .authors-table thead th {
+    text-align: left;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .authors-table tbody td {
+    padding: 10px;
+    border-bottom: 1px solid #f5f5f5;
+    vertical-align: middle;
+  }
+  
+  .authors-table tbody tr:hover {
+    background-color: #f9f9f9;
+  }
+  
+  /* Author Name Cell */
+  .author-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .author-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ddd;
+  }
+  
+  /* Action Buttons */
+  .block-button {
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    margin-right: 5px;
+    cursor: pointer;
+  }
+  
+  .edit-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    cursor: pointer;
+  }
+  
+  .block-button:hover {
+    background-color: #ff6666;
+  }
+  
+  .edit-button:hover {
+    background-color: #339aff;
+  }
+  
+  /* Add Author Button */
+  .add-author-button {
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 15px 20px;
+    margin-top: 20px;
+    cursor: pointer;
+    display: block;
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-family: inherit;
+  }
+  
+  .add-author-button:hover {
+    background-color: #ff8533;
+  }
+  
+
+  /* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+  .pagination-button {
+    background-color: #f5f5f5;
+    color: #555;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+  
+  .pagination-button:disabled {
+    background-color: #e0e0e0;
+    cursor: not-allowed;
+  }
+  
+  .pagination-button:hover:not(:disabled) {
+    background-color: #d6d6d6;
+  }
+  
+  .pagination span {
+    font-size: 0.95rem;
+  }
+  

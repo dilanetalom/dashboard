@@ -1,0 +1,76 @@
+/* Container */
+.recent-invoices-container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px 0;
+    width: 95%;
+  }
+  
+  /* Header */
+  .recent-invoices-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .recent-invoices-header h3 {
+    font-size: 1.2rem;
+    margin: 0;
+  }
+  
+  .recent-invoices-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .filter-button,
+  .more-button {
+    background-color: #f5f5f5;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  
+  .filter-button:hover,
+  .more-button:hover {
+    background-color: #e0e0e0;
+  }
+  
+  /* Table */
+  .recent-invoices-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+  
+  .recent-invoices-table thead th {
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+  }
+  
+  .recent-invoices-table tbody td {
+    padding: 10px;
+    border-bottom: 1px solid #f5f5f5;
+  }
+  
+  .recent-invoices-table tbody tr:hover {
+    background-color: #f9f9f9;
+  }
+  
+  /* Status Badge */
+  .status-badge {
+    display: inline-block;
+    background-color: #cce5ff;
+    color: #0056b3;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+  }
+  

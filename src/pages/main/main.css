@@ -1,0 +1,15 @@
+.app-container {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .app-main {
+    margin-left: 290px;
+  }
+
+  .section {
+    margin-top: 80px;
+    min-height: calc(100vh - 80px);
+    width: calc(100vw - 290px);
+    background-color: #F4F4F4;
+  }

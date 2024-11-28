@@ -1,0 +1,82 @@
+
+.sidebar-container {
+    background-color: #007F99;
+    width: 290px;
+    height: 100vh;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    
+}
+
+.logo {
+    height: 80px;
+    padding: 8px;
+    border-bottom: 1px solid rgb(235, 230, 230);
+}
+
+.sidebar-items {
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    list-style: none;
+}
+
+
+.sidebar-item {
+    height: 10%;
+}
+
+.sidebar-item-link {
+    padding-left: 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    color: white;
+    height: 100%;
+    transition: all 0.2s ease;
+}
+
+.sidebar-item-link:hover {
+    cursor: pointer;
+    background-color: #f0942bad;
+    font-size: 15px;
+    
+}
+
+.sidebar-item-link.active {
+   background-color: #f0932b;
+    width: 102%;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-top-right-radius:  5px;
+    border-bottom-right-radius: 5px;
+
+}
+
+.sidebar-logout-button {
+    background-color: #c0392b;
+    color: white;
+    border: none;
+    height: 60px;
+    width: 100%;
+    font-size: 16px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sidebar-logout-button:hover {
+    font-size: 15px;
+    
+}
