@@ -3,6 +3,8 @@ import { FaEye } from 'react-icons/fa';
 import logo from "../../assets/logos.png"
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login:React.FC = () => {
   const [visible, setVisible] = useState(true);
@@ -33,16 +35,20 @@ const Login:React.FC = () => {
 
       try {
         const response = await axios.post(`${API_URL}/login`, { email, password });
-          console.log('Connexion réussie:', response);
-          // Ici, vous pouvez stocker le token ou rediriger l'utilisateur
-          
-          const token = response.data.token;
+      
+         const token = response.data.token;
           localStorage.setItem('authToken', token);
-          navigate("/board")
+          toast.success('Connexion réussie !');
+        
+          setTimeout(() => {
+            navigate("main/board");
+        }, 2000);
+         
 
-      } catch (err) {
-          setError('Échec de la connexion. Vérifiez vos identifiants.');
-      } finally {
+      } catch (error) {
+          toast.error('Une erreur s\'est produite lors de l authentification. Veuillez réessayer.');
+      }
+       finally {
           setLoading(false); // Arrêter le chargement
       }
   };
@@ -50,6 +56,7 @@ const Login:React.FC = () => {
 
   return (
     <div className="flex flex-col gap-3 items-center justify-center min-h-screen bg-gray-100">
+           <ToastContainer />
       <div>
         <img src={logo} alt="" />
       </div>
@@ -87,9 +94,9 @@ const Login:React.FC = () => {
           <FaEye className='absolute right-4 transform -translate-y-[28px]  graycolor cursor-pointer' onClick={()=>setVisible(!visible)}/>
      
       </div>
-      {
+      {/* {
       error && <p style={{ color: 'red' }}>{error}</p>
-      }
+      } */}
       <button
          type="submit" disabled={loading}
         className="graybackcolor text-white font-semibold py-2 px-4 rounded hover:orangebackcolor transition duration-200 w-full"

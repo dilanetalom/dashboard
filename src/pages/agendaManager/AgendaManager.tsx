@@ -1,8 +1,11 @@
+import AgendaTable from "../../components/agenda-table/AgendaTable"
 
 
 function AgendaManager() {
   return (
-    <div>AgendaManager</div>
+    <div>
+      <AgendaTable/>
+    </div>
   )
 }
 

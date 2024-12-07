@@ -1,8 +1,11 @@
+import UserTable from "../../components/user-table/UserTable"
 
 
 function Settings() {
   return (
-    <div>Settings</div>
+    <div>
+      <UserTable/>
+    </div>
   )
 }
 

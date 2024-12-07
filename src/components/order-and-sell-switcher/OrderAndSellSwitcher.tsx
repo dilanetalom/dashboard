@@ -40,8 +40,8 @@ const OrderAndSellSwitcher: React.FC = () => {
 
   // Pagination logic
   const totalPages = Math.ceil(activeData.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentItems = activeData.slice(startIndex, startIndex + itemsPerPage);
+  // const startIndex = (currentPage - 1) * itemsPerPage;//
+  // const currentItems = activeData.slice(startIndex, startIndex + itemsPerPage);
 
   // Handlers
   const goToNextPage = () => {
@@ -107,7 +107,7 @@ const OrderAndSellSwitcher: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {currentItems.map((sale) => (
+              {/* {currentItems.map((sale) => (
                 <tr key={sale.id}>
                   <td>{sale.date}</td>
                   <td>{sale.bookName}</td>
@@ -125,7 +125,7 @@ const OrderAndSellSwitcher: React.FC = () => {
                     <button className="edit-button">Modifier</button>
                   </td>
                 </tr>
-              ))}
+              ))} */}
             </tbody>
           </table>
         </div>
@@ -149,7 +149,7 @@ const OrderAndSellSwitcher: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {currentItems.map((order) => (
+              {/* {currentItems.map((order) => (
                 <tr key={order.id}>
                   <td>{order.date}</td>
                   <td>{order.clientName}</td>
@@ -168,7 +168,7 @@ const OrderAndSellSwitcher: React.FC = () => {
                     <button className="edit-button">Modifier</button>
                   </td>
                 </tr>
-              ))}
+              ))} */}
             </tbody>
           </table>
         </div>

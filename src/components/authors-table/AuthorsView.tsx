@@ -1,89 +1,41 @@
-import React, { useEffect, useState } from 'react'
-import { getAuthorById } from './authorservice';
+import React from 'react'
 
-interface Author {
-    id: number;
-    name: string;
-    gender: string;
-    country: string;
-    imageauthor: File | null; // ou string si vous voulez stocker l'URL de l'image
-    description: string;
-    date_nais: string; // Format de date, par exemple "YYYY-MM-DD"
-    email: string;
+
+import './Modal.css'; // Assurez-vous d'ajouter le CSS pour le style
+import { Author } from '../books-table/bookService';
+
+interface ModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    author?: Author|null; // L'auteur dont on veut afficher les détails
 }
+const AuthorsView: React.FC<ModalProps> = ({ isOpen, onClose, author  }) => {
 
-interface AuthorFormModalProps {
-        author: Author | null;
-        isOpen: boolean;
-        onClose: () => void;
-}
-const AuthorsView: React.FC<AuthorFormModalProps> = ({ isOpen, onClose, author }) => {
-
-    const [allAuthor, setAllAuthor] = useState<Author[]>([]);
-   
 
     
     if (!isOpen || !author) return null;
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[999] overflow-y-auto py-10">
-            <div className="bg-white w-96 p-6 rounded-lg shadow-md  mt-36">
-                <h2 className="text-lg font-bold mb-4">Ajouter un auteur</h2>
-                <form >
-
-                    {/* Champ pour télécharger l'image */}
-                    <div className="mb-4 flex justify-center">
-                        <label className="block text-sm font-medium mb-1 w-20 h-20 rounded-full bg-white shadow-md flex items-center justify-center cursor-pointer" htmlFor="imageauthor">
-
-                            <img src="" alt="Preview" className="w-20 h-20 rounded-full object-cover" />
-
-                        </label>
-
-                    </div>
-
-
-
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium mb-1" htmlFor="name">Name</label>
-                        <p>{allAuthor.name}</p>
-                    </div>
-
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium mb-1" htmlFor="gender">Gender</label>
-                        <p>{allAuthor.gender}</p>
-
-                    </div>
-
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium mb-1" htmlFor="country">Country</label>
-                        <p>{allAuthor.country}</p>
-
-                    </div>
-
-
-
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium mb-1" htmlFor="description">Description</label>
-                        <p>{allAuthor.description}</p>
-                    
-                    </div>
-
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium mb-1" htmlFor="date_nais">Date of Birth</label>
-                        <p>{allAuthor.date_nais}</p>
-
-
-                    </div>
-
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium mb-1" htmlFor="email">Email</label>
-                        <p>{allAuthor.email}</p>
-
-                    </div>
+            <div className="bg-white w-96  p-6 rounded-lg shadow-md  mt-36">
+                <h2 className="text-lg font-bold mb-4">Détail de l'auteur</h2>
+                <div className="flex flex-col gap-2">
+                    <img
+                        src={`http://127.0.0.1:8000/images/authors/${author.imageauthor}`}
+                        alt={author.name}
+                        className="author-avatar"
+                    />
+                    <p><strong>ID:</strong> {author.id}</p>
+                    <p><strong>Nom:</strong> {author.name}</p>
+                    <p><strong>Description:</strong> {author.description}</p>
+                    <p><strong>Email:</strong> {author.email}</p>
+                    <p><strong>Pays:</strong> {author.country}</p>
+                    <p><strong>Genre:</strong> {author.gender}</p>
+                </div>
 
                     <div className="flex justify-end">
-                        <button type="button" className="bg-red-500 text-white py-2 px-4 rounded mr-2" onClick={onClose}>Cancel</button>
+                        <button type="button" className="graybackcolor text-white py-2 px-4 rounded mr-2" onClick={onClose}>Cancel</button>
                     </div>
-                </form>
+               
             </div>
         </div>
     )

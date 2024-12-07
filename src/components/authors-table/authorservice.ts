@@ -63,7 +63,7 @@ export const updateAuthor = async (id: string, authorData: any) => {
 // Service pour supprimer un auteur
 export const deleteAuthor = async (id: string) => {
     const token = getToken();
-    const response = await axios.delete(`${API_URL}/${id}`, {
+    const response = await axios.delete(`${API_URL}/deleteauthor/${id}`, {
         headers: {
             Authorization: `Bearer ${token}`,
         },

@@ -11,6 +11,8 @@ import ContentIcon from '../../assets/icons_png/content.png';
 import ReportIcon from '../../assets/icons_png/report.png';
 import SettingsIcon from '../../assets/icons_png/settings.png';
 import { MdLogout } from "react-icons/md";
+import axios from 'axios';
+import { useState } from 'react';
 
 
 
@@ -36,33 +38,38 @@ const linkItems = [
         currentRoute: false,
         href: "books"
     },
+ 
+ 
     {
         id: 4,
+        label: "Gestion des actualites",
+        icon: ContentIcon,
+        currentRoute: false,
+        href: "content"
+    },
+
+    {
+        id: 5,
+        label: "Gestion des evennements",
+        icon: AgendaIcon,
+        currentRoute: false,
+        href: "agendas"
+    },
+
+    {
+        id: 6,
         label: "Gestion des commandes/ventes",
         icon: CartIcon,
         currentRoute: false,
         href: "orders"
     },
+ 
     {
-        id: 5,
-        label: "Gestion des agendas",
-        icon: AgendaIcon,
-        currentRoute: false,
-        href: "agendas"
-    },
-    {
-        id: 6,
+        id: 7,
         label: "Gestion des lecteurs",
         icon: ReaderIcon,
         currentRoute: false,
         href: "readers"
-    },
-    {
-        id: 7,
-        label: "Gestion des contenus",
-        icon: ContentIcon,
-        currentRoute: false,
-        href: "content"
     },
     {
         id: 8,
@@ -81,10 +88,92 @@ const linkItems = [
     
 ]
 
+
+
+interface ConfirmationModalProps {
+    onConfirm: () => void;
+    onCancel: () => void;
+}
+
+const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ onConfirm, onCancel }) => {
+    return (
+        <div style={modalOverlayStyle}>
+            <div style={modalStyle} className='flex flex-col gap-10'>
+                <h2>Voulez-vous vraiment vous déconnecter ?</h2>
+                <div className='flex gap-5 justify-center'>
+                    <button className='px-3 py-2 rounded-md graybackcolor text-white' onClick={onConfirm}>Oui</button>
+                    <button className='px-3 py-2 rounded-md yellowbackcolor text-white' onClick={onCancel}>Non</button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// Styles pour le modal
+const modalOverlayStyle: React.CSSProperties = {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+};
+
+const modalStyle: React.CSSProperties = {
+    backgroundColor: 'white',
+    padding: '20px',
+    borderRadius: '8px',
+    textAlign: 'center',
+};
+
+
+
 function AppSidebar() {
     const {pathname} = useLocation();
+    const [showModal, setShowModal] = useState(false);
+   
+const API_URL = 'http://127.0.0.1:8000/api'; // Remplace par l'URL de ton API
 
- 
+// Fonction de déconnexion
+ const logout = async () => {
+    const token = localStorage.getItem('authToken'); // Récupère le token
+
+    try {
+        // Envoie une requête de déconnexion à l'API
+        const response = await axios.post(`${API_URL}/logout`, {}, {
+            headers: {
+                'Authorization': `Bearer ${token}`, // Passe le token dans les en-têtes
+                'Content-Type': 'application/json',
+            },
+        });
+
+        // Vérifie si la requête a réussi
+        if (response.status === 200) {
+            // Supprime le token du localStorage
+            localStorage.removeItem('authToken');
+            return true; // Retourne une confirmation de succès
+        }
+    } catch (error) {
+        console.error('Erreur lors de la déconnexion:', error);
+        return false; // En cas d'erreur, retourne false
+    }
+}
+
+
+
+const handleLogout = async () => {
+    const success = await logout();
+    if (success) {
+        console.log('Déconnexion réussie');
+        window.location.href = '/'; // Rediriger vers la page de connexion
+    } else {
+        console.log('Déconnexion échouée');
+    }
+    setShowModal(false); // Fermer le modal après la déconnexion
+};
   
   return (
     <nav className='sidebar-container'>
@@ -105,10 +194,16 @@ function AppSidebar() {
            
           
         </ul>
-        <button className="sidebar-logout-button">
+        <button className="sidebar-logout-button" onClick={() => setShowModal(true)} >
         <MdLogout />
             Deconnexion
         </button>
+        {showModal && (
+                <ConfirmationModal
+                    onConfirm={handleLogout}
+                    onCancel={() => setShowModal(false)} // Ferme le modal sans déconnexion
+                />
+            )}
     </nav>
   )
 }

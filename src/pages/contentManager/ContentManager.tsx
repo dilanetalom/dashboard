@@ -1,8 +1,11 @@
+import ContentTable from "../../components/content-table/ContentTable"
 
 
 function ContentManager() {
   return (
-    <div>ContentManager</div>
+    <div>
+      <ContentTable/>
+    </div>
   )
 }
 
