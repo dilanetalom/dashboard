@@ -8,7 +8,7 @@ import LoadingModal from '../LoadingModal';
 import AuthorFormModal from './AuthorFormModal';
 import Authorsupdate from './Authorsupdate';
 import ConfirmationModal from '../books-table/ConfirmModal';
-import { Book, deleteBook } from '../books-table/bookService';
+// import { Book, deleteBook } from '../books-table/bookService';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 

@@ -26,7 +26,7 @@ const Formsave: React.FC<NewsFormModalProps> = ({ isOpen, onClose }) => {
     const [images, setImages] = useState<File | null>(null);
     const [type, setType] = useState('');
     const [frome, setFrome] = useState('');
-    const [user_id, setUserId] = useState('1');
+    // const [user_id, setUserId] = useState('1');
     const [imagePreview, setImagePreview] = useState<string | null>(null);
 
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -53,7 +53,7 @@ const Formsave: React.FC<NewsFormModalProps> = ({ isOpen, onClose }) => {
         }
         data.append('type', type);
         data.append('frome', frome);
-        data.append('user_id', user_id);
+        data.append('user_id', "1");
 
         console.log([...data]); // Affichez les données pour déboguer
 
@@ -168,7 +168,7 @@ const Formsave: React.FC<NewsFormModalProps> = ({ isOpen, onClose }) => {
                             className="mt-1 h-10 px-2 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"
                         /> */}
                     </div>
-                    <input type="hidden" name="user_id" value={user_id} />
+                    {/* <input type="hidden" name="user_id" value={user_id} /> */}
                     <div className="flex justify-end mt-6">
                         <button type="submit" className="graybackcolor text-white px-4 py-2 rounded-md mr-2">Soumettre</button>
                         <button type="button" onClick={onClose} className="orangebackcolor px-4 py-2 rounded-md text-white">Annuler</button>

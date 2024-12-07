@@ -1,8 +1,8 @@
-import React, { ChangeEvent, useMemo, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { createAuthor } from './authorservice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import countryList from 'react-select-country-list';
+// import countryList from 'react-select-country-list';
 
 interface AuthorFormModalProps {
     isOpen: boolean;
@@ -21,13 +21,13 @@ const AuthorFormModal: React.FC<AuthorFormModalProps> = ({ isOpen, onClose }) =>
     const [email, setEmail] = useState<string>('');
 
   
-    const [value, setValue] = useState('')
+    // const [value, setValue] = useState('')
 
-  const options = useMemo(() => countryList().getData(), [])
+//   const options = useMemo(() => countryList().getData(), [])
 
-  const changeHandler = (value: React.SetStateAction<string>) => {
-    setCountry(value)
-  }
+//   const changeHandler = (value: React.SetStateAction<string>) => {
+//     setCountry(value)
+//   }
 
 
 
