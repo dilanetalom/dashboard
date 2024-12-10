@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { API_URL } from '../authors-table/authorservice';
 import { toast, ToastContainer } from 'react-toastify';
 import { Readers } from './ReaderTable';
+import { API_URL } from '../Url';
 
 interface ReaderModalProps {
     showModal: boolean;

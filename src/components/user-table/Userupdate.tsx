@@ -31,7 +31,7 @@ const Userupdate: React.FC<UserSaveProps> = ({ isOpen, onClose, user }) => {
     });
     const [loading, setLoading] = useState(false);
 
-    const [errors, setErrors] = useState<Record<string, string>>({});
+    const [errors] = useState<Record<string, string>>({});
 
     // Remplir le formulaire avec les données de l'utilisateur si elles existent
     useEffect(() => {

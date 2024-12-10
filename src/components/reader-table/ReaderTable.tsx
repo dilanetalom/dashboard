@@ -5,11 +5,11 @@ import ReaderModal from "./ReaderModal";
 import { FaDeleteLeft } from "react-icons/fa6";
 import { FaEdit } from "react-icons/fa";
 import LoadingModal from "../LoadingModal";
-import { API_URL } from "../authors-table/authorservice";
 import axios from "axios";
 import Readerview from "./Readerview";
 import { toast, ToastContainer } from "react-toastify";
 import ConfirmationModal from "../books-table/ConfirmModal";
+import { API_URL } from "../Url";
 
 
 export interface Readers {

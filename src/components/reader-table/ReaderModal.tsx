@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { API_URL } from '../authors-table/authorservice';
 import { toast, ToastContainer } from 'react-toastify';
+import { API_URL } from '../Url';
 
 interface ReaderModalProps {
     showModal: boolean;
