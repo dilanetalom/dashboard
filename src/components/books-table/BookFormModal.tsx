@@ -317,8 +317,8 @@ const BookFormModal: React.FC<BookFormModalProps> = ({ isOpen, onClose, authors 
                     </div>
 
                     <div className="flex justify-end">
-                        <button type="button" className="bg-red-500 text-white py-2 px-4 rounded mr-2" onClick={onClose}>Annuler</button>
-                        <button type="submit" className="bg-green-500 text-white py-2 px-4 rounded">Enregistrer</button>
+                        <button type="button" className="orangebackcolor text-white py-2 px-4 rounded mr-2" onClick={onClose}>Annuler</button>
+                        <button type="submit" className="graybackcolor text-white py-2 px-4 rounded">Enregistrer</button>
                     </div>
                 </form>
             </div>

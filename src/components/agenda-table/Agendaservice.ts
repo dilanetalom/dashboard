@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { API_URL } from '../Url';
 
-const API_URL = 'http://127.0.0.1:8000/api';
+
 export interface NewsData {
     id: number;
     name: string;
@@ -59,12 +60,15 @@ const token = getToken();
     }
 
     // Mettre à jour une actualité
-    export const updateNews =async (id:string, newsData:FormData) => {
+    export const updateNews =async (id:string, data:any) => {
+       
         try {
-            const response = await axios.put(`${API_URL}/updateevent/${id}`, newsData, {
+            const response = await axios.put(`${API_URL}/updateevent/${id}`, data, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },});
+                
+                
             return response.data; // Retourner les données de la réponse
         } catch (error) {
             throw error; // Gérer l'erreur

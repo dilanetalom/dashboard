@@ -2,15 +2,17 @@ import React, { ChangeEvent, useState } from 'react';
 import { saveNews } from './Agendaservice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Author } from '../books-table/bookService';
 
 interface NewsFormModalProps {
     isOpen: boolean;
+    author: Author[];
     onClose: () => void;
 }
 
 
 
-const Agendasave: React.FC<NewsFormModalProps> = ({ isOpen, onClose }) => {
+const Agendasave: React.FC<NewsFormModalProps> = ({ isOpen, onClose, author }) => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [eventdate, setEventdate] = useState('');
@@ -18,6 +20,7 @@ const Agendasave: React.FC<NewsFormModalProps> = ({ isOpen, onClose }) => {
     const [images, setImages] = useState<File | null>(null);
     const [type, setType] = useState('');
     const [frome, setFrome] = useState('');
+    const [author_id, setAuthor_id] = useState('');
     const [imagePreview, setImagePreview] = useState<string | null>(null);
 
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -45,6 +48,7 @@ const Agendasave: React.FC<NewsFormModalProps> = ({ isOpen, onClose }) => {
         }
         data.append('type', type);
         data.append('frome', frome);
+        data.append('author_id', author_id);
         data.append('user_id', "1");
 
         console.log([...data]); // Affichez les données pour déboguer
@@ -152,17 +156,39 @@ const Agendasave: React.FC<NewsFormModalProps> = ({ isOpen, onClose }) => {
                             id="frome"
                             name="frome"
                             value={frome}
-                            onChange={(e)=>setFrome(e.target.value)}
+                            onChange={(e) => setFrome(e.target.value)}
                             required
                             className="border border-gray-300 rounded w-full p-2"
                         >
                             <option value="">Provenance</option>
                             <option value="interne">interne</option>
                             <option value="externe">externe</option>
-                      
+
                         </select>
-                       
-                     
+
+                    </div>
+
+
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700" htmlFor="frome">Auteurs:</label>
+                        <select
+                            id="frome"
+                            name="author_id"
+                            value={author_id}
+                            onChange={(e) => setAuthor_id(e.target.value)}
+                            required
+                            className="border border-gray-300 rounded w-full p-2"
+                        >
+                              <option value="">Selectionner</option>
+                            {
+                                author.map((item) => {
+                                    return (
+                                        <option value={item.id}>{item.name}</option>
+                               )
+                                })
+                            }
+                        </select>
+
                     </div>
                     {/* <input type="hidden" name="user_id" value={user_id} /> */}
                     <div className="flex justify-end mt-6">

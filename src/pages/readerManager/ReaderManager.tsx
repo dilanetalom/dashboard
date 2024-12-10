@@ -1,8 +1,11 @@
+import ReaderTable from "../../components/reader-table/ReaderTable"
 
 
 function ReaderManager() {
   return (
-    <div>ReaderManager</div>
+    <div>
+      <ReaderTable/>
+    </div>
   )
 }
 

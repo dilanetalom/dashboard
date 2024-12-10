@@ -16,7 +16,7 @@ const AuthorsView: React.FC<ModalProps> = ({ isOpen, onClose, author  }) => {
     if (!isOpen || !author) return null;
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[999] overflow-y-auto py-10">
-            <div className="bg-white w-96  p-6 rounded-lg shadow-md  mt-36">
+            <div className="bg-white w-96  h-[96%] p-6 rounded-lg shadow-md overflow-auto ">
                 <h2 className="text-lg font-bold mb-4">Détail de l'auteur</h2>
                 <div className="flex flex-col gap-2">
                     <img
@@ -30,6 +30,21 @@ const AuthorsView: React.FC<ModalProps> = ({ isOpen, onClose, author  }) => {
                     <p><strong>Email:</strong> {author.email}</p>
                     <p><strong>Pays:</strong> {author.country}</p>
                     <p><strong>Genre:</strong> {author.gender}</p>
+
+                    <div>
+                      <p className='mt-6'><strong>  Tous Ses livres</strong></p>
+                        
+                           {author.books && author.books.length > 0 ? (
+                            author.books.map((item) => (
+                                <p key={item.id}><strong>-</strong> {item.title}</p>
+                            ))
+                        ) : (
+                            <p>Aucun livre pour cet auteur</p>
+                        )}
+                        
+                       
+
+                    </div>
                 </div>
 
                     <div className="flex justify-end">

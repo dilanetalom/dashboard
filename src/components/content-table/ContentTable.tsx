@@ -5,54 +5,58 @@ import { FaDeleteLeft } from 'react-icons/fa6';
 
 // import Formsave, { NewsData } from './Formsave';
 
-import { getNews } from './contentservice';
+import { deleteNews, getNews } from './contentservice';
 import LoadingModal from '../LoadingModal';
 import NewsDetailModal, { NewsData } from './NewsdetailModal';
 import Formsave from './Formsave';
+import { toast, ToastContainer } from 'react-toastify';
+import ConfirmationModal from '../books-table/ConfirmModal';
+import { getAllAuthors } from '../authors-table/authorservice';
+import { Author } from '../books-table/bookService';
 
 
 
 const ContentTable: React.FC = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [news, setNews] = useState<NewsData[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [news, setNews] = useState<NewsData[]>([]);
 
-    const [isDetailModalOpen, setIsDetailModalOpen] = useState(false); // État pour le modal de détails
-    const [selectedNews, setSelectedNews] = useState<NewsData | null>(null);
-    
-
-    const handleOpenModal = () => setIsModalOpen(true);
-    const handleCloseModal = () => setIsModalOpen(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false); // État pour le modal de détails
+  const [selectedNews, setSelectedNews] = useState<NewsData | null>(null);
 
 
-    const handleOpenDetailModal = (newsItem: NewsData) => {
-        setSelectedNews(newsItem);
-        setIsDetailModalOpen(true);
-    };
-    const handleCloseDetailModal = () => {
-        setIsDetailModalOpen(false);
-        setSelectedNews(null);
-    };
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
 
 
-    const getauthors = async () => {
-        try {
-          const datas = await getNews()
-          setNews(datas)
-          setLoading(true);
-        } catch (error) {
-    
-        } finally {
-          setLoading(false);
-        }
-    
-      }
-      useEffect(()=>{
-        getauthors()
-      },[])
-    
+  const handleOpenDetailModal = (newsItem: NewsData) => {
+    setSelectedNews(newsItem);
+    setIsDetailModalOpen(true);
+  };
+  const handleCloseDetailModal = () => {
+    setIsDetailModalOpen(false);
+    setSelectedNews(null);
+  };
 
-      
+
+  const getauthors = async () => {
+    try {
+      const datas = await getNews()
+      setNews(datas)
+      setLoading(true);
+    } catch (error) {
+
+    } finally {
+      setLoading(false);
+    }
+
+  }
+  useEffect(() => {
+    getauthors()
+  }, [])
+
+
+
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const itemsPerPage = 5;
@@ -76,16 +80,73 @@ const ContentTable: React.FC = () => {
     pageNumbers.push(i);
   }
 
+
+  const [readerdel, setReaderdel] = useState<NewsData>();
+  const [showModalts, setShowModalts] = useState<boolean>(false);
+
+
+  const handleDeletes = (oder: NewsData) => {
+    setShowModalts(true)
+    setReaderdel(oder)
+
+  };
+
+  const handleDelete = async () => {
+    if (readerdel) {
+      setLoading(true);
+      try {
+        const num = readerdel.id;
+        const str = num.toString();
+        await deleteNews(str)
+        toast.success('actualite supprimée avec succès !');
+        setTimeout(() => {
+          setLoading(false)
+        }, 1000);
+        // Fermer le modal après soumission
+        // Recharge la page après un délai pour que l'utilisateur puisse voir le message
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } catch (error) {
+        toast.error('Une erreur s\'est produite lors de la suppression. Veuillez réessayer.');
+      }
+    }
+  };
+
   
+  const[authors, setAuthors] = useState<Author[]>([]);
+
+  useEffect(() => {
+    // Charger les auteurs
+    const loadAuthors = async () => {
+      const authorsData = await getAllAuthors();
+      setAuthors(authorsData);
+    };
+
+    // Charger le livre à modifier
+
+    loadAuthors();
+
+  }, []);
+
+
+
   return (
     <div className="books-table-container">
-         <Formsave isOpen={isModalOpen} onClose={handleCloseModal}  />
-         <NewsDetailModal 
-                isOpen={isDetailModalOpen} 
-                onClose={handleCloseDetailModal} 
-                news={selectedNews} 
-            />
-      
+      <ToastContainer />
+      <Formsave isOpen={isModalOpen} onClose={handleCloseModal} author={authors} />
+      <NewsDetailModal
+        isOpen={isDetailModalOpen}
+        onClose={handleCloseDetailModal}
+        news={selectedNews}
+      />
+
+      <ConfirmationModal
+        isOpen={showModalts}
+        onClose={() => setShowModalts(false)}
+        onConfirm={handleDelete}
+      />
+
       <div className="books-search-filter">
         <div className="search-bar">
           <input
@@ -98,8 +159,8 @@ const ContentTable: React.FC = () => {
           <button className="search-button">🔍</button>
         </div>
         <div className='flex gap-3'>
-          <button className="px-4 py-2 bg-blue-500 rounded-md text-white"  onClick={handleOpenModal}>Ajouter une actualité</button>
-        
+          <button className="px-4 py-2 bg-blue-500 rounded-md text-white" onClick={handleOpenModal}>Ajouter une actualité</button>
+
           <button className="filter-button">Filter</button>
         </div>
       </div>
@@ -108,7 +169,7 @@ const ContentTable: React.FC = () => {
         <table className="books-table">
           <thead>
             <tr>
-            <th>Image</th>
+              <th>Image</th>
               <th>Nom</th>
               <th>Type</th>
               <th>Description</th>
@@ -122,24 +183,24 @@ const ContentTable: React.FC = () => {
               {currentBooks.map((book) => (
                 <tr key={book.id}>
                   <td>
-                  <div  className='w-10 h-10'>
-                   <img
-                          src={`http://127.0.0.1:8000/images/news/${book.image}`}
-                          alt="Author Avatar"
-                          className=" w-full h-full object-cover rounded-full"
-                        />
-                   </div>
+                    <div className='w-10 h-10'>
+                      <img
+                        src={`http://127.0.0.1:8000/images/news/${book.image}`}
+                        alt="Author Avatar"
+                        className=" w-full h-full object-cover rounded-full"
+                      />
+                    </div>
                   </td>
                   <td>{book.name}</td>
                   <td>{book.type}</td>
                   <td>{book.description}</td>
                   <td>{book.newsdate}</td>
-                
+
                   <td className='flex gap-2'>
-                    <button className="text-white py-2 px-3 rounded-md bg-green-500" ><FaDeleteLeft /></button>
+                    <button className="text-white py-2 px-3 rounded-md bg-green-500" onClick={()=>handleDeletes(book)} ><FaDeleteLeft /></button>
                     <button className="text-white py-2 px-3 rounded-md bg-blue-500"><FaEdit /></button>
                     <button className="text-white py-2 px-3 rounded-md bg-black"
-                    onClick={() => handleOpenDetailModal(book)}
+                      onClick={() => handleOpenDetailModal(book)}
                     ><FaEye /></button>
                   </td>
                 </tr>

@@ -1,5 +1,6 @@
 // userService.ts
 import axios, { AxiosError } from 'axios';
+import { API_URL } from '../Url';
 
 
 export interface User {
@@ -11,14 +12,19 @@ export interface User {
     role: string;
   }
 
-  const API_URL = 'http://127.0.0.1:8000/api';
-
+  const getToken = () => {
+    return localStorage.getItem('authToken'); // Assurez-vous que le token est bien stocké dans localStorage
+};
+const token = getToken();
 
 
 // Créer un nouvel utilisateur
 export const createUser = async (userData: User): Promise<User> => {
     try {
-        const response = await axios.post<User>(`${API_URL}/register`, userData);
+        const response = await axios.post<User>(`${API_URL}/register`, userData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },});
         return response.data;
     } catch (error) {
         const axiosError = error as AxiosError; // Assertion de type
@@ -31,7 +37,10 @@ export const createUser = async (userData: User): Promise<User> => {
 // Lire tous les utilisateurs
 export const getUsers = async (): Promise<User[]> => {
     try {
-        const response = await axios.get<User[]>(`${API_URL}/allusers`);
+        const response = await axios.get<User[]>(`${API_URL}/allusers`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },});
         return response.data;
     } catch (error) {
         const axiosError = error as AxiosError; // Assertion de type
@@ -42,7 +51,10 @@ export const getUsers = async (): Promise<User[]> => {
 // Lire un utilisateur par ID
 export const getUserById = async (userId: string): Promise<User> => {
     try {
-        const response = await axios.get<User>(`${API_URL}/${userId}`);
+        const response = await axios.get<User>(`${API_URL}/${userId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },});
         return response.data;
     } catch (error) {
         const axiosError = error as AxiosError; // Assertion de type
@@ -53,7 +65,10 @@ export const getUserById = async (userId: string): Promise<User> => {
 // Mettre à jour un utilisateur
 export const updateUser = async (userId: string, userData: User): Promise<User> => {
     try {
-        const response = await axios.put<User>(`${API_URL}/updateuser/${userId}`, userData);
+        const response = await axios.put<User>(`${API_URL}/updateuser/${userId}`, userData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },});
         return response.data;
     } catch (error) {
         const axiosError = error as AxiosError; // Assertion de type
@@ -64,7 +79,10 @@ export const updateUser = async (userId: string, userData: User): Promise<User> 
 // Supprimer un utilisateur
 export const deleteUser = async (userId: string): Promise<void> => {
     try {
-        await axios.delete(`${API_URL}/deleteuser/${userId}`);
+        await axios.delete(`${API_URL}/deleteuser/${userId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },});
     } catch (error) {
         const axiosError = error as AxiosError; // Assertion de type
         throw axiosError.response?.data || 'Erreur lors de la Suppression de l\'utilisateur';

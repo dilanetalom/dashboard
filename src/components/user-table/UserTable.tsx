@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { FaEdit } from 'react-icons/fa'
+import { FaEdit, FaUser } from 'react-icons/fa'
 import { FaDeleteLeft } from 'react-icons/fa6'
 import UserSave from './UserSave';
 import { deleteUser, getUsers, User } from './userservice';
@@ -22,10 +22,11 @@ const UserTable: React.FC = () => {
     }
 
     const getauthors = async () => {
+        setLoading(true);
         try {
             const datas = await getUsers()
             setUser(datas)
-            setLoading(true);
+            setLoading(false);
         } catch (error) {
 
         } finally {
@@ -72,25 +73,43 @@ const UserTable: React.FC = () => {
       };
 
 
+ const [parsedUser, setParsedUser] = useState<User|null>()
+
+
+  useEffect(()=>{
+    const user = localStorage.getItem('user'); // Récupérer l'utilisateur du localStorage
+
+  if (user) { // Vérifiez que l'utilisateur n'est pas null
+    setParsedUser(JSON.parse(user)); // Convertir la chaîne JSON en objet
+  } else {
+      console.log('Aucun utilisateur trouvé dans le localStorage.');
+  }
+  },[])
+
+
 
     return (
-        <div className='p-10 flex flex-col gap-20'>
+        <div className='p-10 flex flex-col gap-10'>
        <ToastContainer />
             <div className='w-full h-auto bg-white p-10 flex flex-col gap-5 rounded-md'>
                 <p className='text-[19px] font-bold '> Information personnel</p>
                 <div className='w-full flex justify-between items-end'>
                     <div className='flex flex-row gap-5 items-center'>
-                        <div className='w-[120px] h-[120px] bg-gray-100 rounded-full'></div>
+                        <div className='w-[120px] h-[120px] bg-gray-100 rounded-full flex items-center justify-center'>
+                            <FaUser size={30}/>
+                        </div>
                         <div>
-                            <p>Salim Serge</p>
-                            <p>SalimSerge@gmail.com</p>
-                            <p>698615740</p>
-                            <p className='font-bold'>Super Admin</p>
+                            <p> {parsedUser ? parsedUser.name : ''}</p>
+                            <p> {parsedUser ? parsedUser.email : ''}</p>
+                            <p> {parsedUser ? parsedUser.gender : ''}</p>
+                            <p className='font-bold'> {parsedUser ? parsedUser.role : ''}</p>
                         </div>
                     </div>
-                    <div>
-                        <button className='font-bold orangebackcolor text-white p-[12px] rounded-[5px] w-[81] h-[42px] text-[13px]'>Modifier</button>
-                    </div>
+                 
+                <div className='w-full flex justify-center'>
+                    <button className='font-bold orangebackcolor text-white p-[12px] rounded-[5px] w-[144px] h-[42px] text-[13px]' onClick={() => setModalIsOpen(true)}>Ajouter un admin</button>
+                </div>
+                
                 </div>
             </div>
 
@@ -144,9 +163,6 @@ const UserTable: React.FC = () => {
                       onConfirm={handleDelete}
                     />
 
-                <div className='w-full flex justify-center'>
-                    <button className='font-bold orangebackcolor text-white p-[12px] rounded-[5px] w-[144px] h-[42px] text-[13px]' onClick={() => setModalIsOpen(true)}>Ajouter un admin</button>
-                </div>
             </div>
 
         </div>

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { API_URL } from '../Url';
 
 // Définir l'interface pour un livre
 export interface Book {
@@ -28,9 +29,10 @@ export interface Author {
     description: string;
     date_nais: string; // Format de date, par exemple "YYYY-MM-DD"
     email: string;
+    books: Book[];
 }
 // URL de l'API (à adapter selon ton backend)
-const API_URL = 'http://127.0.0.1:8000/api';
+
 const getToken = () => {
     return localStorage.getItem('authToken'); // Assurez-vous que le token est bien stocké dans localStorage
 };

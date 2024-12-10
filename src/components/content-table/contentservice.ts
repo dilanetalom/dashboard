@@ -1,6 +1,6 @@
 import axios from 'axios';
+import { API_URL } from '../Url';
 
-const API_URL = 'http://127.0.0.1:8000/api';
 
 const getToken = () => {
     return localStorage.getItem('authToken'); // Assurez-vous que le token est bien stocké dans localStorage

@@ -8,11 +8,12 @@ import CartIcon from '../../assets/icons_png/cart.png';
 import AgendaIcon from '../../assets/icons_png/calendar.png';
 import ReaderIcon from '../../assets/icons_png/person.png';
 import ContentIcon from '../../assets/icons_png/content.png';
-import ReportIcon from '../../assets/icons_png/report.png';
+// import ReportIcon from '../../assets/icons_png/report.png';
 import SettingsIcon from '../../assets/icons_png/settings.png';
 import { MdLogout } from "react-icons/md";
 import axios from 'axios';
 import { useState } from 'react';
+import { API_URL } from '../Url';
 
 
 
@@ -71,15 +72,15 @@ const linkItems = [
         currentRoute: false,
         href: "readers"
     },
+    // {
+    //     id: 8,
+    //     label: "Reports et analytiques",
+    //     icon: ReportIcon,
+    //     currentRoute: false,
+    //     href: "analytics"
+    // },
     {
         id: 8,
-        label: "Reports et analytiques",
-        icon: ReportIcon,
-        currentRoute: false,
-        href: "analytics"
-    },
-    {
-        id: 9,
         label: "Parametres",
         icon: SettingsIcon,
         currentRoute: false,
@@ -135,7 +136,7 @@ function AppSidebar() {
     const {pathname} = useLocation();
     const [showModal, setShowModal] = useState(false);
    
-const API_URL = 'http://127.0.0.1:8000/api'; // Remplace par l'URL de ton API
+
 
 // Fonction de déconnexion
  const logout = async () => {
@@ -184,7 +185,7 @@ const handleLogout = async () => {
             {
                 linkItems.map((link) => (
                     <li className="sidebar-item" key={link.id}>
-                        <Link to={link.href} className={`sidebar-item-link ${pathname.startsWith(link.href) || (link.href === '/board' && pathname === '/') ? 'active' : ''}`}>
+                        <Link to={link.href} className={`sidebar-item-link ${pathname.startsWith(link.href) || (link.href === 'main/board' && pathname === '/') ? 'active' : ''}`}>
                         <img src={link.icon} alt="" />
                         <span>{link.label}</span>
                         </Link>
@@ -194,7 +195,7 @@ const handleLogout = async () => {
            
           
         </ul>
-        <button className="sidebar-logout-button" onClick={() => setShowModal(true)} >
+        <button className="sidebar-logout-button orangebackcolor" onClick={() => setShowModal(true)} >
         <MdLogout />
             Deconnexion
         </button>

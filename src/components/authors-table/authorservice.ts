@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { API_URL } from '../Url';
 
 // URL de base de l'API
-const API_URL = 'http://127.0.0.1:8000/api';
+
 
 // Fonction pour obtenir le token depuis localStorage
 const getToken = () => {

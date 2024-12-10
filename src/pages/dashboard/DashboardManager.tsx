@@ -13,11 +13,19 @@ interface DashboardData {
 function DashboardManager() {
 
   const [data, setData] = useState<DashboardData | null>(null);
+
   const API_URL = 'http://127.0.0.1:8000/api';
+
+
+    const token =  localStorage.getItem('authToken'); // Assurez-vous que le token est bien stocké dans localStorage
+
 
  const getBooks = async () => {
         try {
-            const response = await axios.get(`${API_URL}/count`,);
+            const response = await axios.get(`${API_URL}/count`, {
+              headers: {
+                  Authorization: `Bearer ${token}`,
+              },});
             setData(response.data);
         } catch (error) {
             console.error('Erreur lors de la récupération des livres:', error);
@@ -26,7 +34,7 @@ function DashboardManager() {
     };
 
     useEffect(()=>{
-        getBooks()
+        getBooks()     
         
     },[])
 

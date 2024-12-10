@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { updateUser } from './userservice';
 import { toast, ToastContainer } from 'react-toastify';
+import LoadingModal from '../LoadingModal';
 
 interface UserFormData {
     id: string;
@@ -28,6 +29,7 @@ const Userupdate: React.FC<UserSaveProps> = ({ isOpen, onClose, user }) => {
         gender: '',
         role: '',
     });
+    const [loading, setLoading] = useState(false);
 
     const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -50,20 +52,17 @@ const Userupdate: React.FC<UserSaveProps> = ({ isOpen, onClose, user }) => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Validation
-        const newErrors: Record<string, string> = {};
-        if (!formData.name) newErrors.name = 'Le nom est requis';
-        if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Veuillez entrer un email valide';
-        if (formData.password.length < 8) newErrors.password = 'Le mot de passe doit contenir au moins 8 caractères';
+        setLoading(true)
 
-        if (Object.keys(newErrors).length === 0) {
             try {
                 if (user) {
                     // Mise à jour de l'utilisateur
                     console.log(user);
                     
                     await updateUser(user.id, formData); // Assurez-vous que `user.id` est défini
+                    setLoading(false)
                     toast.success('Utilisateur mis à jour avec succès !');
+
                 } 
                 setTimeout(() => {
                     onClose();
@@ -72,6 +71,7 @@ const Userupdate: React.FC<UserSaveProps> = ({ isOpen, onClose, user }) => {
                     window.location.reload();
                 }, 1000);
             } catch (error) {
+                
                 toast.error('Une erreur s\'est produite lors de l\'enregistrement. Veuillez réessayer.');
             }
 
@@ -83,9 +83,6 @@ const Userupdate: React.FC<UserSaveProps> = ({ isOpen, onClose, user }) => {
                 gender: '',
                 role: '',
             });
-        } else {
-            setErrors(newErrors);
-        }
     };
 
 
@@ -93,7 +90,9 @@ const Userupdate: React.FC<UserSaveProps> = ({ isOpen, onClose, user }) => {
 
 
     return (
+        
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[999]">
+                  {loading && <LoadingModal />}
             <ToastContainer />
             <div className="bg-white rounded-lg p-6 w-96 h-auto overflow-auto">
                 <form onSubmit={handleSubmit} className="space-y-6">

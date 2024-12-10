@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { API_URL } from '../../components/Url';
 
 const Login:React.FC = () => {
   const [visible, setVisible] = useState(true);
@@ -18,7 +19,7 @@ const Login:React.FC = () => {
       e.preventDefault();
       setError(''); // Réinitialiser l'erreur
       setLoading(true); // Démarrer le chargement
-      const API_URL = "http://127.0.0.1:8000/api"
+    
 
       // Validation simple
       if (!email) {
@@ -37,7 +38,9 @@ const Login:React.FC = () => {
         const response = await axios.post(`${API_URL}/login`, { email, password });
       
          const token = response.data.token;
+         const user = response.data.user;
           localStorage.setItem('authToken', token);
+          localStorage.setItem('user', JSON.stringify(user));
           toast.success('Connexion réussie !');
         
           setTimeout(() => {

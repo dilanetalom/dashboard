@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './authors-table.css';
 import { FaDeleteLeft } from 'react-icons/fa6';
-import { FaEdit, FaEye } from 'react-icons/fa';
+import { FaEdit, FaEye, FaFileExcel, FaFilePdf } from 'react-icons/fa';
 import { deleteAuthor, getAllAuthors, getAuthorById } from './authorservice';
 import AuthorsView from './AuthorsView';
 import LoadingModal from '../LoadingModal';
@@ -11,19 +11,23 @@ import ConfirmationModal from '../books-table/ConfirmModal';
 // import { Book, deleteBook } from '../books-table/bookService';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
+import { Author } from '../books-table/bookService';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 
 
-interface Author {
-  id: number;
-  name: string;
-  gender: string;
-  country: string;
-  imageauthor: File | null; // ou string si vous voulez stocker l'URL de l'image
-  description: string;
-  date_nais: string; // Format de date, par exemple "YYYY-MM-DD"
-  email: string;
-}
+// interface Author {
+//   id: number;
+//   name: string;
+//   gender: string;
+//   country: string;
+//   imageauthor: File | null; // ou string si vous voulez stocker l'URL de l'image
+//   description: string;
+//   date_nais: string; // Format de date, par exemple "YYYY-MM-DD"
+//   email: string;
+// }
 
 
 const AuthorsTable: React.FC = () => {
@@ -171,6 +175,36 @@ const AuthorsTable: React.FC = () => {
   };
 
 
+  
+  const downloadExcel = () => {
+    // Créer un nouveau classeur
+    const worksheet = XLSX.utils.json_to_sheet(allAuthors);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Données');
+
+    // Générer le fichier Excel
+    XLSX.writeFile(workbook, `Mes livres.xlsx`);
+  };
+
+
+  const downloadPDF = () => {
+    const doc = new jsPDF();
+
+    // Ajouter un titre
+    doc.text('Mes Données Filtrées', 14, 16);
+
+    // Créer une table à partir des données
+    autoTable(doc, {
+        head: [['Nom', 'Description', 'Sexe', 'Pays', 'Email']], // Remplace par tes en-têtes
+        body: allAuthors.map(item => [item.name, item.description, item.gender, item.country, item.email]), // Remplace par tes données
+    });
+
+    // Sauvegarder le fichier PDF
+    doc.save(`Mes livres.pdf`);
+};
+
+
+
   return (
     <div>
 
@@ -192,7 +226,14 @@ const AuthorsTable: React.FC = () => {
           <div className='flex gap-3'>
             <button className="px-6 py-3 bg-blue-500 text-white rounded-md" onClick={() => setIsModalOpen(true)}>Ajouter un Auteur</button>
             <AuthorFormModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-            <button className="filter-button">Filter</button>
+            <div className='flex flex-row gap-3'>
+            <button className="filter-button" onClick={downloadExcel}>
+               <FaFileExcel/>
+            </button>
+            <button className="filter-button" onClick={downloadPDF}>
+               <FaFilePdf/>
+            </button>
+          </div>
           </div>
         </div>
 

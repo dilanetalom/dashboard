@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './books-table.css';
-import { FaEdit, FaEye } from 'react-icons/fa';
+import { FaEdit, FaEye, FaFileExcel, FaFilePdf } from 'react-icons/fa';
 import { FaDeleteLeft } from 'react-icons/fa6';
 import BookFormModal from './BookFormModal';
 import { deleteBook, getBookById, getBooks, } from './bookService';
@@ -11,6 +11,9 @@ import ConfirmationModal from './ConfirmModal';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import Updatebook from './Updatebook';
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 
 export interface Book {
@@ -132,21 +135,21 @@ const BooksTable: React.FC = () => {
       setLoading(true);
       try {
         const num = selectedAuthors.id;
-    const str = num.toString();
+        const str = num.toString();
         await deleteBook(str);
         // Mettre à jour l'état ou recharger les auteurs si nécessaire
         toast.success('Livres supprimé avec succès !');
         setTimeout(() => {
-           setIsConfirmModalOpen(false)
-        }, 2000); 
-      // Fermer le modal après soumission
+          setIsConfirmModalOpen(false)
+        }, 2000);
+        // Fermer le modal après soumission
         // Recharge la page après un délai pour que l'utilisateur puisse voir le message
         setTimeout(() => {
-            window.location.reload();
+          window.location.reload();
         }, 1000);
-      }catch (error) {
+      } catch (error) {
         toast.error('Une erreur s\'est produite lors de la suppression. Veuillez réessayer.');
-    }
+      }
     }
   };
 
@@ -158,34 +161,60 @@ const BooksTable: React.FC = () => {
   const [authors, setAuthors] = useState([]);
   const [upbook, setUpBook] = useState(null);
 
-  const openModals = async  (id: number) => {
+  const openModals = async (id: number) => {
     setIsModalOpenbook(true);
     const num = id;
     const str = num.toString();
     const bookData = await getBookById(str); // Charger le livre par ID
     setUpBook(bookData);
-};
+  };
 
-const closeModals = () => {
+  const closeModals = () => {
     setIsModalOpenbook(false);
     setUpBook(null);
-};
+  };
 
   useEffect(() => {
     // Charger les auteurs
     const loadAuthors = async () => {
-        const authorsData = await getAllAuthors();
-        setAuthors(authorsData);
+      const authorsData = await getAllAuthors();
+      setAuthors(authorsData);
     };
 
     // Charger le livre à modifier
-   
+
     loadAuthors();
- 
-}, []);
+
+  }, []);
 
 
 
+  const downloadExcel = () => {
+    // Créer un nouveau classeur
+    const worksheet = XLSX.utils.json_to_sheet(currentBooks);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Données');
+
+    // Générer le fichier Excel
+    XLSX.writeFile(workbook, `Mes livres.xlsx`);
+  };
+
+
+  const downloadPDF = () => {
+    const doc = new jsPDF();
+
+    // Ajouter un titre
+    doc.text('Mes Données Filtrées', 14, 16);
+
+    // Créer une table à partir des données
+    autoTable(doc, {
+        head: [['Titre', 'Description', 'Date de publication', 'Langue', 'Prix numerique', 'Prix physique']], // Remplace par tes en-têtes
+        body: currentBooks.map(item => [item.title, item.description, item.pub_date, item.language, item.price_n, item.price_p]), // Remplace par tes données
+    });
+
+    // Sauvegarder le fichier PDF
+    doc.save(`Mes livres.pdf`);
+};
 
 
   return (
@@ -213,7 +242,14 @@ const closeModals = () => {
             onClose={() => setIsModalOpen(false)}
             authors={AllAuthors}
           />
-          <button className="filter-button">Filter</button>
+          <div className='flex flex-row gap-3'>
+            <button className="filter-button" onClick={downloadExcel}>
+               <FaFileExcel/>
+            </button>
+            <button className="filter-button" onClick={downloadPDF}>
+               <FaFilePdf/>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -259,8 +295,8 @@ const closeModals = () => {
                     <span className="status-badge">{book.status}</span>
                   </td>
                   <td className='flex gap-2'>
-                    <button className="text-white py-2 px-3 rounded-md bg-green-500" onClick={() =>  openConfirmModal(book)}><FaDeleteLeft /></button>
-                    <button className="text-white py-2 px-3 rounded-md bg-blue-500" onClick={()=>openModals(book.id)}><FaEdit /></button>
+                    <button className="text-white py-2 px-3 rounded-md bg-green-500" onClick={() => openConfirmModal(book)}><FaDeleteLeft /></button>
+                    <button className="text-white py-2 px-3 rounded-md bg-blue-500" onClick={() => openModals(book.id)}><FaEdit /></button>
                     <button className="text-white py-2 px-3 rounded-md bg-black" onClick={() => book.id !== undefined && openModal(book.id)}><FaEye /></button>
                     <BooksView
                       isOpen={setModalOpend}
