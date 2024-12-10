@@ -3,7 +3,7 @@ import { API_URL } from '../Url';
 
 
 export interface NewsData {
-    id: number;
+    id: string;
     name: string;
     description: string;
     eventdate: string; // Format de date approprié

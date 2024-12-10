@@ -58,11 +58,16 @@ const AgendaEdit: React.FC<NewsFormModalProps> = ({ isOpen, onClose, existingEve
         data.append('user_id', "1");
       
         try {
-            await updateNews(existingEvent.id,data); // Ici, assure-toi que saveNews gère les mises à jour
-            toast.success('Votre événement a été mis à jour avec succès !');
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
+            if (existingEvent) {
+                await updateNews(existingEvent.id,data); // Ici, assure-toi que saveNews gère les mises à jour
+                toast.success('Votre événement a été mis à jour avec succès !');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
+            } else {
+                // Gérer le cas où existingEvent est null ou undefined
+            }
+         
         } catch (error) {
             toast.error('Une erreur s\'est produite lors de la mise à jour. Veuillez réessayer.');
         }
