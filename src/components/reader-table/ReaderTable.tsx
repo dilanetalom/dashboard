@@ -16,6 +16,7 @@ export interface Readers {
     id: string;
     name: string;
     email: string;
+    phone: string;
 }
 
 
@@ -106,6 +107,27 @@ const ReaderTable = () => {
     };
 
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [searchTerm, setSearchTerm] = useState('');
+    const itemsPerPage = 5;
+  
+    // Filtrer les auteurs en fonction du terme de recherche
+    const filteredAuthors = reader.filter(author =>
+      author.email.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+      // Calculer l'index des éléments à afficher
+  const indexOfLastAuthor = currentPage * itemsPerPage;
+  const indexOfFirstAuthor = indexOfLastAuthor - itemsPerPage;
+  const currentBooks = filteredAuthors.slice(indexOfFirstAuthor, indexOfLastAuthor);
+
+  // Changer de page
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  // Nombre total de pages
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(reader.length / itemsPerPage); i++) {
+    pageNumbers.push(i);
+  }
 
 
     return (
@@ -126,6 +148,8 @@ const ReaderTable = () => {
                         type="text"
                         placeholder="Recherche d'un lecteur"
                         className="search-input"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
                     />
                     {/* <button className="search-button">🔍</button> */}
                 </div>
@@ -135,6 +159,7 @@ const ReaderTable = () => {
                     {/* <button className="filter-button">Filter</button> */}
                 </div>
             </div>
+
 
             <div className="table-container">
                 <table className="books-table">
@@ -148,7 +173,7 @@ const ReaderTable = () => {
                     {loading && <LoadingModal />}
                     {!loading && reader && (
                         <tbody>
-                            {reader.map((book) => (
+                            {currentBooks.map((book) => (
                                 <tr key={book.id}>
                                     <td>{book.email}</td>
                                     <td></td>
@@ -167,14 +192,13 @@ const ReaderTable = () => {
                     )}
                 </table>
 
-                {/* Pagination */}
-                {/* <div className="pagination">
-     {pageNumbers.map(number => (
-       <button key={number} onClick={() => paginate(number)} className={`pagination-button ${currentPage === number ? 'active' : ''}`}>
-         {number}
-       </button>
-     ))}
-   </div> */}
+                <div className="pagination">
+          {pageNumbers.map(number => (
+            <button key={number} onClick={() => paginate(number)} className={`pagination-button ${currentPage === number ? 'active' : ''}`}>
+              {number}
+            </button>
+          ))}
+        </div>
 
 
             </div>

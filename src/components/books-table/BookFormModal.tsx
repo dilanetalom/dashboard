@@ -1,7 +1,8 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { createBook } from './bookService';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { User } from '../navbar/AppNavbar';
 
 
 interface Author {
@@ -33,9 +34,11 @@ const BookFormModal: React.FC<BookFormModalProps> = ({ isOpen, onClose, authors 
     const [pubDate, setPubDate] = useState<string>('');
     const [price_p, setPrice_p] = useState<number | string>('');
     const [price_n, setPrice_n] = useState<number | string>('');
-    const [userId, setUserId] = useState<number | string>('');
+    // const [userId, setUserId] = useState<number | string>('');
     const [authorId, setAuthorId] = useState<number | string>('');
     const [image, setImage] = useState<File | null>(null);
+    const [loading, setLoading] = useState(false);
+
 
 
     // const [isModalOpen, setIsModalOpen] = useState(false);
@@ -55,13 +58,23 @@ const BookFormModal: React.FC<BookFormModalProps> = ({ isOpen, onClose, authors 
         }
     };
 
-
+    const [parsedUser, setParsedUser] = useState<User|null>()
+    useEffect(()=>{
+        const user = localStorage.getItem('user'); // Récupérer l'utilisateur du localStorage
+    
+      if (user) { // Vérifiez que l'utilisateur n'est pas null
+        setParsedUser(JSON.parse(user)); // Convertir la chaîne JSON en objet
+      } else {
+          console.log('Aucun utilisateur trouvé dans le localStorage.');
+      }
+      },[])
+    
 
 
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
+        setLoading(true)
         const formData = new FormData();
         formData.append('title', title);
         formData.append('description', description);
@@ -73,7 +86,7 @@ const BookFormModal: React.FC<BookFormModalProps> = ({ isOpen, onClose, authors 
         formData.append('pub_date', pubDate);
         formData.append('price_p', String(price_p));
         formData.append('price_n', String(price_n));
-        formData.append('user_id', String(userId));
+        formData.append('user_id', String(parsedUser?parsedUser.id:null));
         formData.append('author_id', String(authorId));
 
         formData.forEach((value, key) => {
@@ -85,6 +98,7 @@ const BookFormModal: React.FC<BookFormModalProps> = ({ isOpen, onClose, authors 
             await createBook(formData);
             console.log('Book submitted:', formData);
             toast.success('Votre message a été envoyé avec succès !');
+            setLoading(false)
             setTimeout(() => {
                 onClose(); 
             }, 2000); 
@@ -271,7 +285,7 @@ const BookFormModal: React.FC<BookFormModalProps> = ({ isOpen, onClose, authors 
                         />
                     </div>
 
-                    <div className="mb-4">
+                    {/* <div className="mb-4">
                         <label className="block text-sm font-medium mb-1" htmlFor="user_id">User ID</label>
                         <input
                             type="text"
@@ -282,7 +296,7 @@ const BookFormModal: React.FC<BookFormModalProps> = ({ isOpen, onClose, authors 
                             required
                             className="border border-gray-300 rounded w-full p-2"
                         />
-                    </div>
+                    </div> */}
 
                     <div className="mb-4">
                         <label className="block text-sm font-medium mb-1" htmlFor="author_id">Auteur</label>
@@ -294,6 +308,7 @@ const BookFormModal: React.FC<BookFormModalProps> = ({ isOpen, onClose, authors 
                             required
                             className="border border-gray-300 rounded w-full p-2"
                         >
+                              <option value="">selectionner</option>
                             {
                                 authors.map((item: any) => {
                                     return (
@@ -318,7 +333,9 @@ const BookFormModal: React.FC<BookFormModalProps> = ({ isOpen, onClose, authors 
 
                     <div className="flex justify-end">
                         <button type="button" className="orangebackcolor text-white py-2 px-4 rounded mr-2" onClick={onClose}>Annuler</button>
-                        <button type="submit" className="graybackcolor text-white py-2 px-4 rounded">Enregistrer</button>
+                        <button type="submit" className="graybackcolor text-white py-2 px-4 rounded"> 
+                        {loading ? 'Chargement...' : 'Soumettre'}
+                            </button>
                     </div>
                 </form>
             </div>

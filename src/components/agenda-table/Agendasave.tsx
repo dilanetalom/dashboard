@@ -22,6 +22,8 @@ const Agendasave: React.FC<NewsFormModalProps> = ({ isOpen, onClose, author }) =
     const [frome, setFrome] = useState('');
     const [author_id, setAuthor_id] = useState('');
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+
 
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -36,6 +38,7 @@ const Agendasave: React.FC<NewsFormModalProps> = ({ isOpen, onClose, author }) =
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setLoading(true)
         // const user_id = 1;
         // Créer un FormData pour envoyer l'image et les autres données
         const data = new FormData();
@@ -56,6 +59,8 @@ const Agendasave: React.FC<NewsFormModalProps> = ({ isOpen, onClose, author }) =
         try {
             await saveNews(data);
             toast.success('Votre actualité est enregistré avec succès !');
+            setLoading(false)
+
             setTimeout(() => {
                 window.location.reload();
             }, 1000);
@@ -192,7 +197,9 @@ const Agendasave: React.FC<NewsFormModalProps> = ({ isOpen, onClose, author }) =
                     </div>
                     {/* <input type="hidden" name="user_id" value={user_id} /> */}
                     <div className="flex justify-end mt-6">
-                        <button type="submit" className="graybackcolor text-white px-4 py-2 rounded-md mr-2">Soumettre</button>
+                        <button type="submit" className="graybackcolor text-white px-4 py-2 rounded-md mr-2">
+                        {loading ? 'Chargement...' : 'Soumettre'}
+                        </button>
                         <button type="button" onClick={onClose} className="orangebackcolor px-4 py-2 rounded-md text-white">Annuler</button>
                     </div>
                 </form>

@@ -1,5 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
-import { createAuthor } from './authorservice';
+import {updateAuthor } from './authorservice';
+import { toast } from 'react-toastify';
+import { API_URLE } from '../Url';
 
 
 interface Author {
@@ -26,51 +28,51 @@ const Authorsupdate: React.FC<AuthorFormModalProps> = ({ isOpent, onCloser, auth
     const [description, setDescription] = useState<string>('');
     const [date_nais, setDate_nais] = useState<string>('');
     const [email, setEmail] = useState<string>('');
+    const [id, setId] = useState<number | null>();
+    const [loading, setLoading] = useState(false);
+
 
 
 
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     
-    const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            const file = e.target.files[0];
-            setImageAuthor(file);
-    
-            // Vérifie que le fichier est valide
-            if (file instanceof File) {
-                const previewUrl = URL.createObjectURL(file);
-                setImagePreview(previewUrl);
-            } else {
-                console.error("L'argument passé à createObjectURL n'est pas un File.");
-            }
-        } else {
-            console.error("Aucun fichier sélectionné.");
-        }
-    };
-
-
     useEffect(() => {
         if (authors) {
             setName(authors.name);
             setGender(authors.gender);
             setCountry(authors.country);
-            setImageAuthor(authors.imageauthor);
+            setImagePreview(`${API_URLE}/images/authors/${authors.imageauthor}`);
             setDescription(authors.description);
             setDate_nais(authors.date_nais);
             setEmail(authors.email);
-            // Gérer l'aperçu de l'image si nécessaire
-            if (authors.imageauthor) {
-                const previewUrl = URL.createObjectURL(authors.imageauthor);
-                setImagePreview(previewUrl);
-            }
+            setId(authors.id)
+ 
         }
    
     }, [authors])
 
+
+    const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            const file = e.target.files[0];
+            if (file.type.startsWith('image/')) {
+                setImageAuthor(file);
     
+                // Créer une URL pour l'aperçu de l'image
+                const previewUrl = URL.createObjectURL(file);
+                setImagePreview(previewUrl);
+            } else {
+                console.error('Le fichier sélectionné n\'est pas une image.');
+            }
+        }
+    };
+
+
+
     const handleSubmit = async  (e: React.FormEvent<HTMLFormElement>) => {
         
         e.preventDefault();
+        setLoading(true)
         const formData = new FormData();
         formData.append('name', name);
         formData.append('gender', gender);
@@ -79,11 +81,37 @@ const Authorsupdate: React.FC<AuthorFormModalProps> = ({ isOpent, onCloser, auth
         formData.append('description', description);
         formData.append('date_nais', date_nais);
         formData.append('email', email);
-       
-        const author = await createAuthor(formData)
-        console.log(author);
-       
-        onCloser(); // Fermer le modal après soumission
+
+
+        try {
+
+            const num = id;
+
+            if (num != null) { // This checks for both null and undefined
+                const str = num.toString();
+                await updateAuthor(str, formData)
+            } else {
+                console.log('id is null or undefined');
+            }
+           
+          
+            toast.success('Votre auteur est modifié avec succès !');
+            setLoading(false)
+            setTimeout(() => {
+                onCloser(); 
+            }, 2000);
+            // Fermer le modal après soumission
+            // Recharge la page après un délai pour que l'utilisateur puisse voir le message
+
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000); 
+
+        } catch (error) {
+            toast.error('Une erreur s\'est produite lors de la modification.Veuillez réessayer.');
+
+        };
+      // Fermer le modal après soumission
     };
 
     if (!isOpent) return null; // Ne rien rendre si le modal n'est pas ouvert
@@ -107,7 +135,7 @@ const Authorsupdate: React.FC<AuthorFormModalProps> = ({ isOpent, onCloser, auth
                             type="file"
                             id="imageauthor"
                             name="imageauthor"
-                            onChange={handleImageChange}  
+                            onChange={handleImageChange}
                             accept="image/*"
                             className="border border-gray-300 rounded w-full p-2 hidden"
                         />
@@ -138,8 +166,8 @@ const Authorsupdate: React.FC<AuthorFormModalProps> = ({ isOpent, onCloser, auth
                             className="border border-gray-300 rounded w-full p-2"
                         >
                             <option value="">Select Gender</option>
-                            <option value="male">Masculin</option>
-                            <option value="female">Feminin</option>
+                            <option value="Masculin">Masculin</option>
+                            <option value="Feminin">Feminin</option>
                       
                         </select>
                     </div>
@@ -202,8 +230,10 @@ const Authorsupdate: React.FC<AuthorFormModalProps> = ({ isOpent, onCloser, auth
                     </div>
 
                     <div className="flex justify-end">
-                        <button type="button" className="bg-red-500 text-white py-2 px-4 rounded mr-2" onClick={onCloser}>Cancel</button>
-                        <button type="submit" className="bg-green-500 text-white py-2 px-4 rounded">Submit</button>
+                        <button type="button" className="orangebackcolor text-white py-2 px-4 rounded mr-2" onClick={onCloser}>Cancel</button>
+                        <button type="submit" className="graybackcolor text-white py-2 px-4 rounded">
+                        {loading ? 'Chargement...' : 'Soumettre'}
+                        </button>
                     </div>
                 </form>
             </div>

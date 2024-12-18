@@ -13,6 +13,8 @@ interface ReaderModalProps {
 const Readerview: React.FC<ReaderModalProps> = ({ showModal, handleClose, reader }) => {
     const [email, setEmail] = useState<string>('');
     const [name, setName] = useState<string>('');
+    const [phone, setPhone] = useState<string>();
+
     const [loading, setLoading] = useState<boolean>(false);
 
     const getToken = () => {
@@ -24,6 +26,7 @@ const Readerview: React.FC<ReaderModalProps> = ({ showModal, handleClose, reader
                     if (reader) {
                         setEmail(reader.email);
                         setName(reader.name);
+                        setPhone(reader.phone);
                     }
                     console.log(reader);       
     }, [reader]);
@@ -36,7 +39,7 @@ const Readerview: React.FC<ReaderModalProps> = ({ showModal, handleClose, reader
         try {
    
                 // Mise à jour du lecteur
-                const response = await axios.put(`${API_URL}/readers/${reader?reader.id:''}`, { email, name }, {
+                const response = await axios.put(`${API_URL}/readers/${reader?reader.id:''}`, { email, name, phone }, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -83,6 +86,18 @@ const Readerview: React.FC<ReaderModalProps> = ({ showModal, handleClose, reader
                                     className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-500"
                                 />
                             </div>
+
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700">Téléphone</label>
+                                <input
+                                    type="number"
+                                    placeholder="Entrez le numero"
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)}
+                                    className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-500"
+                                />
+                            </div>
+
                             <div className="flex justify-end">
                                 <button
                                     type="button"

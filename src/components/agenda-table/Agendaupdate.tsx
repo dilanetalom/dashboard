@@ -3,6 +3,8 @@ import { NewsData, updateNews } from './Agendaservice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Author } from '../books-table/bookService';
+import { API_URLE } from '../Url';
+import { User } from '../navbar/AppNavbar';
 
 interface NewsFormModalProps {
     isOpen: boolean;
@@ -21,6 +23,8 @@ const AgendaEdit: React.FC<NewsFormModalProps> = ({ isOpen, onClose, existingEve
     const [frome, setFrome] = useState('');
     const [author_id, setAuthor_id] = useState('');
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+
 
     useEffect(() => {
         if (existingEvent) {
@@ -30,7 +34,8 @@ const AgendaEdit: React.FC<NewsFormModalProps> = ({ isOpen, onClose, existingEve
             setEnddate(existingEvent.enddate);
             setType(existingEvent.type);
             setFrome(existingEvent.frome);
-            setImagePreview(`http://127.0.0.1:8000/images/event/${existingEvent.image}` || null);
+            setAuthor_id(existingEvent.author_id);
+            setImagePreview(`${API_URLE}/images/event/${existingEvent.image}` || null);
         }
     }, [existingEvent]);
 
@@ -43,8 +48,21 @@ const AgendaEdit: React.FC<NewsFormModalProps> = ({ isOpen, onClose, existingEve
         }
     };
 
+    const [parsedUser, setParsedUser] = useState<User|null>()
+    useEffect(()=>{
+        const user = localStorage.getItem('user'); // Récupérer l'utilisateur du localStorage
+    
+      if (user) { // Vérifiez que l'utilisateur n'est pas null
+        setParsedUser(JSON.parse(user)); // Convertir la chaîne JSON en objet
+      } else {
+          console.log('Aucun utilisateur trouvé dans le localStorage.');
+      }
+      },[])
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setLoading(true)
+        const ids = parsedUser? parsedUser.id:null
         const data = new FormData();
         data.append('name', name);
         data.append('description', description);
@@ -55,12 +73,19 @@ const AgendaEdit: React.FC<NewsFormModalProps> = ({ isOpen, onClose, existingEve
         }
         data.append('type', type);
         data.append('frome', frome);
-        data.append('user_id', "1");
+        data.append('author_id', author_id);
+        if (ids !== null) {
+            data.append('user_id', ids);
+        } else {
+            console.error('IDs is null, cannot append to FormData');
+        }
+    
       
         try {
             if (existingEvent) {
                 await updateNews(existingEvent.id,data); // Ici, assure-toi que saveNews gère les mises à jour
                 toast.success('Votre événement a été mis à jour avec succès !');
+                setLoading(false)
                 setTimeout(() => {
                     window.location.reload();
                 }, 1000);
@@ -199,7 +224,9 @@ const AgendaEdit: React.FC<NewsFormModalProps> = ({ isOpen, onClose, existingEve
 
                     </div>
                     <div className="flex justify-end mt-6">
-                        <button type="submit" className="graybackcolor text-white px-4 py-2 rounded-md mr-2">Mettre à jour</button>
+                        <button type="submit" className="graybackcolor text-white px-4 py-2 rounded-md mr-2">
+                        {loading ? 'Chargement...' : 'Soumettre'}
+                        </button>
                         <button type="button" onClick={onClose} className="orangebackcolor px-4 py-2 rounded-md text-white">Annuler</button>
                     </div>
                 </form>

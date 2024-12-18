@@ -19,6 +19,8 @@ const AuthorFormModal: React.FC<AuthorFormModalProps> = ({ isOpen, onClose }) =>
     const [description, setDescription] = useState<string>('');
     const [date_nais, setDate_nais] = useState<string>('');
     const [email, setEmail] = useState<string>('');
+    const [loading, setLoading] = useState(false);
+
 
   
     // const [value, setValue] = useState('')
@@ -52,6 +54,7 @@ const AuthorFormModal: React.FC<AuthorFormModalProps> = ({ isOpen, onClose }) =>
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
         e.preventDefault();
+        setLoading(true)
         const formData = new FormData();
         formData.append('name', name);
         formData.append('gender', gender);
@@ -65,6 +68,7 @@ const AuthorFormModal: React.FC<AuthorFormModalProps> = ({ isOpen, onClose }) =>
         try {
             await createAuthor(formData)
             toast.success('Votre auteur est enregitré avec succès !');
+            setLoading(false)
             setTimeout(() => {
                 onClose();
             }, 2000);
@@ -199,7 +203,9 @@ const AuthorFormModal: React.FC<AuthorFormModalProps> = ({ isOpen, onClose }) =>
 
                     <div className="flex justify-end">
                         <button type="button" className="orangebackcolor text-white py-2 px-4 rounded mr-2" onClick={onClose}>Cancel</button>
-                        <button type="submit" className="graybackcolor text-white py-2 px-4 rounded">Submit</button>
+                        <button type="submit" className="graybackcolor text-white py-2 px-4 rounded">
+                        {loading ? 'Chargement...' : 'Soumettre'}
+                        </button>
                     </div>
                 </form>
             </div>

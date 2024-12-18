@@ -2,6 +2,8 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import { updateBook } from './bookService'; // Assurez-vous d'avoir une fonction pour mettre à jour le livre
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { User } from '../navbar/AppNavbar';
+import { API_URLE } from '../Url';
 
 interface Author {
     id: number;
@@ -29,6 +31,8 @@ const Updatebook: React.FC<BookFormModalProps> = ({ isOpen, onClose, authors, bo
     const [authorId, setAuthorId] = useState<number | string>('');
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+
 
     useEffect(() => {
         if (book) {
@@ -44,18 +48,18 @@ const Updatebook: React.FC<BookFormModalProps> = ({ isOpen, onClose, authors, bo
             setPrice_n(book.price_n);
             setUserId(book.user_id);
             setAuthorId(book.author_id);
-            setImagePreview(`http://127.0.0.1:8000/images/books/${book.image}`); // Si l'image est une URL
+            setImagePreview(`${API_URLE}/images/books/${book.image}`); // Si l'image est une URL
         }
     }, [book]);
     
+
 
     const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
             const file = e.target.files[0];
             if (file.type.startsWith('image/')) {
                 setImage(file);
-                console.log(file); // Vérifie que le fichier est bien une image
-    
+                console.log(file); 
                 // Créer une URL pour l'aperçu de l'image
                 const previewUrl = URL.createObjectURL(file);
                 setImagePreview(previewUrl);
@@ -65,9 +69,23 @@ const Updatebook: React.FC<BookFormModalProps> = ({ isOpen, onClose, authors, bo
         }
     };
 
+
+
+    const [parsedUser, setParsedUser] = useState<User|null>()
+    useEffect(()=>{
+        const user = localStorage.getItem('user'); // Récupérer l'utilisateur du localStorage
+    
+      if (user) { // Vérifiez que l'utilisateur n'est pas null
+        setParsedUser(JSON.parse(user)); // Convertir la chaîne JSON en objet
+      } else {
+          console.log('Aucun utilisateur trouvé dans le localStorage.');
+      }
+      },[])
+      
+      
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
+        setLoading(true)
         const formData = new FormData();
         formData.append('title', title);
         formData.append('description', description);
@@ -79,14 +97,13 @@ const Updatebook: React.FC<BookFormModalProps> = ({ isOpen, onClose, authors, bo
         formData.append('pub_date', pubDate);
         formData.append('price_p', String(price_p));
         formData.append('price_n', String(price_n));
-        formData.append('user_id', String(userId));
+        formData.append('user_id', String(parsedUser?.id));
         formData.append('author_id', String(authorId));
         
-      
-
         try {
             await updateBook(book.id, formData); // Assurez-vous d'utiliser la bonne méthode pour mettre à jour le livre
             toast.success('Livre modifié avec succès !');
+            setLoading(false)
             setTimeout(() => {
                 onClose();
             }, 2000);
@@ -249,7 +266,7 @@ const Updatebook: React.FC<BookFormModalProps> = ({ isOpen, onClose, authors, bo
                         />
                     </div>
 
-                    <div className="mb-4">
+                    {/* <div className="mb-4">
                         <label className="block text-sm font-medium mb-1" htmlFor="user_id">ID Utilisateur</label>
                         <input
                             type="text"
@@ -260,7 +277,7 @@ const Updatebook: React.FC<BookFormModalProps> = ({ isOpen, onClose, authors, bo
                             required
                             className="border border-gray-300 rounded w-full p-2"
                         />
-                    </div>
+                    </div> */}
 
                     <div className="mb-4">
                         <label className="block text-sm font-medium mb-1" htmlFor="author_id">Auteur</label>
@@ -272,6 +289,7 @@ const Updatebook: React.FC<BookFormModalProps> = ({ isOpen, onClose, authors, bo
                             required
                             className="border border-gray-300 rounded w-full p-2"
                         >
+                               <option value="">selectionner</option>
                             {
                                 authors.map((item) => (
                                     <option key={item.id} value={item.id}>{item.name}</option>
@@ -282,7 +300,9 @@ const Updatebook: React.FC<BookFormModalProps> = ({ isOpen, onClose, authors, bo
 
                     <div className="flex justify-end">
                         <button type="button" className="orangebackcolor text-white py-2 px-4 rounded mr-2" onClick={onClose}>Annuler</button>
-                        <button type="submit" className="graybackcolor text-white py-2 px-4 rounded">Enregistrer</button>
+                        <button type="submit" className="graybackcolor text-white py-2 px-4 rounded">
+                        {loading ? 'Chargement...' : 'Soumettre'}
+                            </button>
                     </div>
                 </form>
             </div>

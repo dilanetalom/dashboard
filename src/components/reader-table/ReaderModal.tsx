@@ -11,6 +11,7 @@ interface ReaderModalProps {
 const ReaderModal: React.FC<ReaderModalProps> = ({ showModal, handleClose }) => {
     const [email, setEmail] = useState<string>('');
     const [name, setName] = useState<string>('');
+    const [phone, setPhone] = useState<string>();
     const [loading, setLoading] = useState<boolean>(false);
 
     const getToken = () => {
@@ -23,7 +24,7 @@ const ReaderModal: React.FC<ReaderModalProps> = ({ showModal, handleClose }) => 
         setLoading(true);
 
         try {
-            const response = await axios.post(`${API_URL}/readers`, { email, name }, {
+            const response = await axios.post(`${API_URL}/readers`, { email, name, phone }, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },});
@@ -53,7 +54,7 @@ const ReaderModal: React.FC<ReaderModalProps> = ({ showModal, handleClose }) => 
                         <h2 className="text-xl font-semibold mb-4">Enregistrement d'un lecteur</h2>
                         <form onSubmit={handleSubmit}>
                             <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700">Email</label>
+                                <label className="block text-sm font-medium text-gray-700">Email *</label>
                                 <input
                                     type="email"
                                     placeholder="Entrez l'email"
@@ -70,6 +71,16 @@ const ReaderModal: React.FC<ReaderModalProps> = ({ showModal, handleClose }) => 
                                     placeholder="Entrez le nom"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
+                                    className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-500"
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700">Téléphone</label>
+                                <input
+                                    type="number"
+                                    placeholder="Entrez le numero"
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)}
                                     className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-500"
                                 />
                             </div>

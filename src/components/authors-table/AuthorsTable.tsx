@@ -15,6 +15,7 @@ import { Author } from '../books-table/bookService';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { API_URLE } from '../Url';
 
 
 
@@ -68,21 +69,11 @@ const AuthorsTable: React.FC = () => {
 
   // modifier l auteur
 
-  const upbyauthors = async (ids: number) => {
-    const num = ids;
-    const str = num.toString();
-
-    try {
-
-      const response = await getAuthorById(str)
-      setSelectedAuthort(response);
+  const upbyauthors = async (auteur: Author) => {
+   
+      setSelectedAuthort(auteur);
       setLoading(false);
       setIsModalOpent(true);
-    } catch (error) {
-
-    } finally {
-      setLoading(false);
-    }
   }
 
 
@@ -191,12 +182,31 @@ const AuthorsTable: React.FC = () => {
     const doc = new jsPDF();
 
     // Ajouter un titre
-    doc.text('Mes Données Filtrées', 14, 16);
+    doc.text('Mes Auteurs', 14, 16);
 
     // Créer une table à partir des données
     autoTable(doc, {
         head: [['Nom', 'Description', 'Sexe', 'Pays', 'Email']], // Remplace par tes en-têtes
         body: allAuthors.map(item => [item.name, item.description, item.gender, item.country, item.email]), // Remplace par tes données
+        styles: {
+          fillColor: [255, 255, 255],
+          textColor: [0, 0, 0],
+          fontSize: 10,
+          cellPadding: 5,
+          lineColor: [0, 0, 0],
+          lineWidth: 0.1,
+      },
+      headStyles: {
+          fillColor: [0, 102, 204],
+          textColor: [255, 255, 255],
+          fontSize: 12,
+          halign: 'center',
+      },
+      alternateRowStyles: {
+          fillColor: [240, 240, 240],
+      },
+      margin: { top: 20 },
+  
     });
 
     // Sauvegarder le fichier PDF
@@ -264,7 +274,7 @@ const AuthorsTable: React.FC = () => {
                     <td>
                    <div  className='w-10 h-10'>
                    <img
-                          src={`http://127.0.0.1:8000/images/authors/${author.imageauthor}`}
+                          src={`${API_URLE}/images/authors/${author.imageauthor}`}
                           alt="Author Avatar"
                           className=" w-full h-full object-cover rounded-full"
                         />
@@ -282,7 +292,7 @@ const AuthorsTable: React.FC = () => {
                     <td className='flex gap-3'>
                       <button className="text-white py-2 px-3 rounded-md bg-green-500"  onClick={() =>  openConfirmModal(author)}><FaDeleteLeft /></button>
 
-                      <button className="text-white py-2 px-3 rounded-md bg-blue-500" onClick={() => upbyauthors(author.id)}><FaEdit /></button>
+                      <button className="text-white py-2 px-3 rounded-md bg-blue-500" onClick={() => upbyauthors(author)}><FaEdit /></button>
                       <Authorsupdate authors={selectedAuthort} isOpent={isModalOpent} onCloser={closeModals} />
 
                       <button className="text-white py-2 px-3 rounded-md bg-black" onClick={() => openModal(author.id)} ><FaEye /></button>

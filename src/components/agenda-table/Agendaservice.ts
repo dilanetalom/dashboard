@@ -12,6 +12,7 @@ export interface NewsData {
     type: string;
     frome: string;
     user_id: string; // ID de l'utilisateur
+    author_id: string; // ID de l'utilisateur
 }
 
 const getToken = () => {
@@ -63,7 +64,7 @@ const token = getToken();
     export const updateNews =async (id:string, data:any) => {
        
         try {
-            const response = await axios.put(`${API_URL}/updateevent/${id}`, data, {
+            const response = await axios.post(`${API_URL}/updateevent/${id}`, data, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },});

@@ -14,6 +14,7 @@ import Updatebook from './Updatebook';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { API_URLE } from '../Url';
 
 
 export interface Book {
@@ -204,12 +205,31 @@ const BooksTable: React.FC = () => {
     const doc = new jsPDF();
 
     // Ajouter un titre
-    doc.text('Mes Données Filtrées', 14, 16);
+    doc.text('Mes Livres', 14, 16);
 
     // Créer une table à partir des données
     autoTable(doc, {
         head: [['Titre', 'Description', 'Date de publication', 'Langue', 'Prix numerique', 'Prix physique']], // Remplace par tes en-têtes
-        body: currentBooks.map(item => [item.title, item.description, item.pub_date, item.language, item.price_n, item.price_p]), // Remplace par tes données
+        body: currentBooks.map(item => [item.title, item.description, item.pub_date, item.language, item.price_n, item.price_p]), 
+        styles: {
+          fillColor: [255, 255, 255],
+          textColor: [0, 0, 0],
+          fontSize: 10,
+          cellPadding: 5,
+          lineColor: [0, 0, 0],
+          lineWidth: 0.1,
+      },
+      headStyles: {
+          fillColor: [0, 102, 204],
+          textColor: [255, 255, 255],
+          fontSize: 12,
+          halign: 'center',
+      },
+      alternateRowStyles: {
+          fillColor: [240, 240, 240],
+      },
+      margin: { top: 20 },
+  // Remplace par tes données
     });
 
     // Sauvegarder le fichier PDF
@@ -260,7 +280,7 @@ const BooksTable: React.FC = () => {
             <tr>
               <th>Nom</th>
               {/* <th>Description</th> */}
-              <th>livre</th>
+              {/* <th>livre</th> */}
               <th>Langue</th>
               <th>Date publication</th>
               <th>Prix N</th>
@@ -278,7 +298,7 @@ const BooksTable: React.FC = () => {
                   <td>
                     <div className="book-name">
                       <img
-                        src={`http://127.0.0.1:8000/images/books/${book.image}`}
+                        src={`${API_URLE}/images/books/${book.image}`}
                         alt={book.title}
                         className="book-image h-10 w-10 rounded-full"
                       />
@@ -286,7 +306,7 @@ const BooksTable: React.FC = () => {
                     </div>
                   </td>
                   {/* <td>{book.description}</td> */}
-                  <td>{book.status}</td>
+                  {/* <td>{book.status}</td> */}
                   <td>{book.language}</td>
                   <td>{book.pub_date}</td>
                   <td>{book.price_n}</td>

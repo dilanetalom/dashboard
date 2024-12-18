@@ -7,12 +7,14 @@ import { FaDeleteLeft } from 'react-icons/fa6';
 
 import { deleteNews, getNews } from './contentservice';
 import LoadingModal from '../LoadingModal';
-import NewsDetailModal, { NewsData } from './NewsdetailModal';
+// import NewsDetailModal, { NewsData } from './NewsdetailModal';
 import Formsave from './Formsave';
 import { toast, ToastContainer } from 'react-toastify';
 import ConfirmationModal from '../books-table/ConfirmModal';
 import { getAllAuthors } from '../authors-table/authorservice';
 import { Author } from '../books-table/bookService';
+import ContentUpdate, { NewsData } from './ContentUpdate';
+import NewsDetailModal from './NewsdetailModal';
 
 
 
@@ -130,6 +132,16 @@ const ContentTable: React.FC = () => {
   }, []);
 
 
+  const [upnew, setUpnew] = useState<NewsData|null>(null);
+  const [showModalls, setShowModalls] = useState<boolean>(false);
+
+
+  const handleNew = (oder: NewsData) => {
+    setShowModalls(true)
+    setUpnew(oder)
+
+  };
+
 
   return (
     <div className="books-table-container">
@@ -147,6 +159,12 @@ const ContentTable: React.FC = () => {
         onConfirm={handleDelete}
       />
 
+    <ContentUpdate
+    isOpen={showModalls}
+    onClose={()=>setShowModalls(false)}
+    author={authors}
+    newsData={upnew}
+    />
       <div className="books-search-filter">
         <div className="search-bar">
           <input
@@ -198,7 +216,9 @@ const ContentTable: React.FC = () => {
 
                   <td className='flex gap-2'>
                     <button className="text-white py-2 px-3 rounded-md bg-green-500" onClick={()=>handleDeletes(book)} ><FaDeleteLeft /></button>
-                    <button className="text-white py-2 px-3 rounded-md bg-blue-500"><FaEdit /></button>
+                    <button className="text-white py-2 px-3 rounded-md bg-blue-500"
+                    onClick={()=>handleNew(book)}
+                    ><FaEdit /></button>
                     <button className="text-white py-2 px-3 rounded-md bg-black"
                       onClick={() => handleOpenDetailModal(book)}
                     ><FaEye /></button>

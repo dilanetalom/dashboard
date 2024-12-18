@@ -49,7 +49,7 @@ const token = getToken();
     // Mettre à jour une actualité
     export const updateNews =async (id:string, newsData:FormData) => {
         try {
-            const response = await axios.put(`${API_URL}/updatenews/${id}`, newsData, {
+            const response = await axios.post(`${API_URL}/updatenews/${id}`, newsData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },});

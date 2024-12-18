@@ -52,7 +52,7 @@ export const getAuthorById = async (id: string) => {
 // Service pour mettre à jour un auteur
 export const updateAuthor = async (id: string, authorData: any) => {
     const token = getToken();
-    const response = await axios.put(`${API_URL}/${id}`, authorData, {
+    const response = await axios.put(`${API_URL}/updateauthors/${id}`, authorData, {
         headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',

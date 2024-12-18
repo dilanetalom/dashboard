@@ -1,13 +1,7 @@
 import React from 'react';
+import { NewsData } from './ContentUpdate';
 
-export interface NewsData {
-    id: number;
-    name: string;
-    type: string;
-    description: string;
-    newsdate: string;
-    image: string;  // Assurez-vous que c'est de type string
-}
+
 
 interface NewsDetailModalProps {
     isOpen: boolean;

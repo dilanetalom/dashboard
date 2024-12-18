@@ -85,25 +85,25 @@ export const getBookById = async (id: string) => {
 };
 
 // Fonction pour mettre à jour un livre
-export const updateBook = async (id: string, bookData: FormData) => {
-
-    for (let [key, value] of bookData.entries()) {
-        console.log(`${key}: ${value}`);
-    }
-
+export const updateBook = async (id: string, bookData: FormData) => {    
     try {
-        const response = await axios.put(`${API_URL}/updatebook/${id}`, bookData, {
+        const response = await axios.post(`${API_URL}/updatebook/${id}`, bookData, {
             headers: {
-                Authorization: `Bearer ${token}`,
-                // 'Content-Type': 'multipart/form-data'
-                        },
+                Authorization: `Bearer ${token}`, 
+                    },
         });
+        console.log(bookData);
+
         return response.data;
     } catch (error) {
         console.error('Erreur lors de la mise à jour du livre:', error);
         throw error;
     }
 };
+
+
+
+
 
 // Fonction pour supprimer un livre
 export const deleteBook = async (id: string) => {
